@@ -88,38 +88,46 @@ namespace Blog.Data
         private static async Task SeedUsersAsync(ApplicationDbContext context, IConfiguration configuration, UserManager<BlogUser> userManager)
         {
 
-            // Seed Amin
-            if (!context.Users.Any(u => u.Email == _adminEmail))
+            try
             {
-                BlogUser adminUser = new()
+                // Seed Amin
+                if (!context.Users.Any(u => u.Email == _adminEmail))
                 {
-                    Email = _adminEmail,
-                    UserName = _adminEmail,
-                    FirstName = "Andy",
-                    LastName = "Pham",
-                    EmailConfirmed = true
-                };
+                    BlogUser adminUser = new()
+                    {
+                        Email = _adminEmail,
+                        UserName = _adminEmail,
+                        FirstName = "Andy",
+                        LastName = "Pham",
+                        EmailConfirmed = true
+                    };
 
-                await userManager.CreateAsync(adminUser, configuration["AdminPassword"] ?? Environment.GetEnvironmentVariable("AdminPassword"));
-                await userManager.AddToRoleAsync(adminUser, _adminRole);
+                    await userManager.CreateAsync(adminUser, configuration["AdminPassword"] ?? Environment.GetEnvironmentVariable("AdminPassword"));
+                    await userManager.AddToRoleAsync(adminUser, _adminRole);
 
+                }
+
+                // Seed Moderator
+                if (!context.Users.Any(u => u.Email == _modEmail))
+                {
+                    BlogUser modUser = new()
+                    {
+                        Email = _modEmail,
+                        UserName = _modEmail,
+                        FirstName = "Mod",
+                        LastName = "Man",
+                        EmailConfirmed = true
+                    };
+
+                    await userManager.CreateAsync(modUser, configuration["ModeratorPassword"] ?? Environment.GetEnvironmentVariable("ModeratorPassword"));
+                    await userManager.AddToRoleAsync(modUser, _modRole);
+
+                }
             }
-
-            // Seed Moderator
-            if (!context.Users.Any(u => u.Email == _modEmail))
+            catch (Exception)
             {
-                BlogUser modUser = new()
-                {
-                    Email = _modEmail,
-                    UserName = _modEmail,
-                    FirstName = "Mod",
-                    LastName = "Man",
-                    EmailConfirmed = true
-                };
 
-                await userManager.CreateAsync(modUser, configuration["ModeratorPassword"] ?? Environment.GetEnvironmentVariable("ModeratorPassword"));
-                await userManager.AddToRoleAsync(modUser, _modRole);
-
+                throw;
             }
         }
     }
