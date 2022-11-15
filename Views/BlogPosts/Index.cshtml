@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Blog.Models.BlogPost>
+@using Blog.Enums
+@using Blog.Services.Interfaces
+
+@inject IImageService ImageService
+
+@inject IBlogPostService BlogPostService
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@*<form asp-action="SearchBlogs" asp-controller="BlogPosts" method="post">
+    <div class="input-group">
+        <input class="form-control" type="search" name="searchString"
+               placeholder="Search Term" />
+        <input type="submit" class="btn btn-outline-primary" value="Search" />
+    </div>
+</form>
+<form asp-action="Index" asp-controller="BlogPosts" method="post">
+    <div class="mt-5">
+        <label class="form-label fw-bold">BLOG FILTER</label>
+
+        <select name="categoryId" asp-items="@ViewBag.CategoryId" class="form-control"
+                onchange="this.form.submit()" onfocus="this.selectedIndex=-1;this.blur();">
+            <option>All Contacts</option>
+        </select>
+    </div>
+</form>*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slug)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Abstract)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPublished)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.ImageData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abstract)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPublished)
+            </td>*@
+            <td>
+                <img src="@ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!,(int)DefaultImage.BlogPostImage)" class="img-fluid">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category!.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> 
+                @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                {
+                <span>|</span>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                <span>|</span>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
