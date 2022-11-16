@@ -82,8 +82,8 @@ namespace Blog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Moderator")]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> selectedTags)
-        {
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string stringTags) // Jacob Replaced / Got Rid of and Added (" IEnumerable<int> selectedTags ") with (" string stringTags ")?!
+		{
 
             ModelState.Remove("CreatorId");
 
@@ -112,7 +112,8 @@ namespace Blog.Controllers
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
 
-                await _blogPostService.AddTagsToBlogPostAsync(selectedTags, blogPost.Id);
+				// Jacob Replace / Got Rid of and Added (" selectedTags ") with (" stringTags ")?!
+				await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
                 //foreach (int tagId in selectedTags)
                 //{
                 //    await _blogPostService.AddTagsToBlogPostAsync(categoryId, contact.Id);
