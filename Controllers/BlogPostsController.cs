@@ -36,10 +36,17 @@ namespace Blog.Controllers
 
         // GET: BlogPosts
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNum)
         {
-            var applicationDbContext = _context.BlogPosts.Include(b => b.Category);
-            return View(await applicationDbContext.ToListAsync());
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+            // _context.BlogPosts.Include(b => b.Category);
+            IPagedList<BlogPost> blogPostPage = (await _blogPostService.GetAllBlogPostsAsync())
+                                            .Where(b => b.IsDeleted == false && b.IsPublished == true)
+                                            .ToPagedList(page, pageSize);
+
+            return View(blogPostPage);
         }
 
 
@@ -82,7 +89,7 @@ namespace Blog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Moderator")]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string stringTags) // Jacob Replaced / Got Rid of and Added (" IEnumerable<int> selectedTags ") with (" string stringTags ")?!
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string? stringTags) // Jacob Replaced / Got Rid of and Added (" IEnumerable<int> selectedTags ") with (" string stringTags ")?!
 		{
 
             ModelState.Remove("CreatorId");
@@ -112,9 +119,12 @@ namespace Blog.Controllers
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
 
-				// Jacob Replace / Got Rid of and Added (" selectedTags ") with (" stringTags ")?!
-				await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
-                //foreach (int tagId in selectedTags)
+                // Jacob Replace / Got Rid of and Added (" selectedTags ") with (" stringTags ")?!
+                if (!string.IsNullOrEmpty(stringTags))
+                {
+                    await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
+
+                }                //foreach (int tagId in selectedTags)
                 //{
                 //    await _blogPostService.AddTagsToBlogPostAsync(categoryId, contact.Id);
                 //}
