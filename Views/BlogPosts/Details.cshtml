@@ -132,14 +132,7 @@
 					<!-- End Author  -->
 					<!-- Start Comment Form Area  -->
 					<div class="axil-comment-area">
-						<div class="axil-total-comment-post">
-							<div class="title">
-								<h4 class="mb--0">@Model.Comments.Count Comments</h4>
-							</div>
-							<div class="add-comment-button cerchio">
-								<a class="axil-button button-rounded" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Details", "BlogPosts", new { slug = Model.Slug })" tabindex="0"><span>Add Your Comment</span></a>
-							</div>
-						</div>
+						
 
 						@if (User.Identity!.IsAuthenticated)
 						{
@@ -148,9 +141,7 @@
 								<h4 class="title">Post a comment</h4>
 								<form asp-action="Create" asp-controller="Comments">
 									<input type="hidden" name="BlogPostId" value="@Model.Id">
-									<p class="comment-notes">
-										<span id="email-notes"></span> Required fields are marked <span class="required">*</span>
-									</p>
+									<input type="hidden" asp-for="Slug">
 									<div class="row row--10">
 
 										<div class="col-12">
@@ -169,6 +160,17 @@
 								</form>
 							</div>
 							<!-- End Comment Respond  -->
+						}
+						else
+						{
+							<div class="axil-total-comment-post">
+								@*<div class="title">
+									<h4 class="mb--0">@Model.Comments.Count Comments</h4>
+								</div>*@
+								<div class="add-comment-button cerchio">
+									<a class="axil-button button-rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "BlogPosts", new { slug = Model.Slug })" tabindex="0"><span>Add Your Comment</span></a>
+								</div>
+							</div>
 						}
 
 						<!-- Start Comment Area  -->

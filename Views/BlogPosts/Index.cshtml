@@ -13,15 +13,19 @@
     ViewData["Title"] = "Home Page";
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 
 <!-- Start Author Area  -->
 <!-- End Author Area  -->
 <!-- Start Post List Wrapper  -->
 <div class="axil-post-list-area axil-section-gap bg-color-white">
     <div class="container">
+        @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+        {
+            <p>
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </p>
+        }
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title">

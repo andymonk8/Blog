@@ -1,53 +1,89 @@
-﻿@model IEnumerable<Blog.Models.Category>
+﻿@using Blog.Enums;
+@using Blog.Services.Interfaces;
+@model IEnumerable<Blog.Models.Category>
+
+@inject IImageService _ImageService
+
+@inject IBlogPostService _BlogPostService
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageType)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="axil-single-widget widget widget_categories mb--30 container">
+	<h1>Index</h1>
+	<p>
+		<a asp-action="Create">Create New</a>
+	</p>
+	<ul>
+		@foreach (Category category in (await _BlogPostService.GetCategoriesAsync()).Take(4))
+		{
+			<li class="cat-item">
+				<a asp-action="Details" asp-controller="Categories" asp-route-id="@category.Id" class="inner">
+					<div class="thumbnail" style="height:50px">
+						<img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!, category.ImageType!, (int)DefaultImage.CategoryImage)" alt="Category Image">
+					</div>
+					<div class="content">
+						<h5 class="title">@category.Name</h5>
+					</div>
+				</a>
+			</li>
+		}
+	</ul>
+</div>
+
+@*<div class="post-single-wrapper axil-section-gap bg-color-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 offset-md-1">
+				<p>
+					<a asp-action="Create">Create New</a>
+				</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								@Html.DisplayNameFor(model => model.Name)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Description)
+							</th>
+							<th>
+								Category Image
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.ImageType)
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>
+									@Html.DisplayFor(modelItem => item.Name)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Description)
+								</td>
+								<td class="justify-content-center">
+									<img src="@ImageService.ConvertByteArrayToFile(item.ImageData, item.ImageType, (int)DefaultImage.CategoryImage)" class="img-fluid" style="height:50%;width:50%">
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ImageType)
+								</td>
+								<td>
+									<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+									<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+									<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>*@

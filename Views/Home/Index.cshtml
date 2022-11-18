@@ -63,7 +63,7 @@
                     <!-- Start Post List  -->
                     <div class="content-block post-list-view mt--30">
                     <div class="post-thumbnail">
-                        <a asp-controller="BlogPosts" asp-action="Details" asp-route-id="@blogPost.Id">
+                        <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Slug">
                             <img src="@ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Post Images">
                         </a>
                     </div>
@@ -105,6 +105,14 @@
                                 <li><a href="#"><i class="fas fa-link"></i></a></li>
                             </ul>*@
                         </div>
+                            <a asp-action="Details" asp-route-slug="@blogPost.Slug">Details</a>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                            {
+                                <span>|</span>
+                                <a asp-action="Edit" asp-route-id="@blogPost.Id">Edit</a>
+                                <span>|</span>
+                                <a asp-action="Delete" asp-route-id="@blogPost.Id">Delete</a>
+                            }
                     </div>
                 </div>
                     <!-- End Post List  -->

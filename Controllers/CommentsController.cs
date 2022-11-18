@@ -25,8 +25,9 @@ namespace Blog.Controllers
 
         }
 
-        // GET: Comments
-        public async Task<IActionResult> Index()
+		[Authorize(Roles = "Administrator, Moderator")]
+		// GET: Comments
+		public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
             return View(await applicationDbContext.ToListAsync());
@@ -80,11 +81,12 @@ namespace Blog.Controllers
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details","BlogPosts", new {slug});
+                
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
-            return View(comment);
-        }
+			ModelState.AddModelError("Comments", "Comment must be at least 2 characters long!");
+			return RedirectToAction("Details", "BlogPosts", new { slug });
+
+		}
 
         // GET: Comments/Edit/5
         [Authorize(Roles = "Administrator, Moderator")]
