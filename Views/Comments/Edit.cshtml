@@ -16,14 +16,14 @@
             <input type="hidden" asp-for="Id" />
             <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="BlogPostId" class="control-label"></label>
+                <label asp-for="BlogPostId" class="control-label">Blog Post</label>
                 <select asp-for="BlogPostId" class="form-control" asp-items="ViewBag.BlogPostId"></select>
                 <span asp-validation-for="BlogPostId" class="text-danger"></span>
             </div>
             </div>
             <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
+                <label asp-for="AuthorId" class="control-label">Commenter</label>
                 <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>

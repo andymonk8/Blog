@@ -62,7 +62,10 @@
 									<li><a asp-action="Index" asp-controller="Home">Home</a></li>
 									<li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
 									<li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
-									<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+									@if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+									{
+										<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+									}
 									<li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
 								</ul>
 								<!-- End Mainmanu Nav -->
@@ -71,15 +74,15 @@
 					</div>
 
 					@*<div class="col-xl-3 col-lg-8 col-md-8 col-sm-9 col-12">
-						<div class="header-search text-end d-flex align-items-center">
-							<form class="header-search-form d-sm-block d-none" asp-controller="Home" asp-action="SearchIndex">
-								<div class="axil-search form-group">
-									<button type="submit" class="search-button"><i class="fal fa-search"></i></button>
-									<input type="text" class="form-control" placeholder="Search" name="SearchString" />
-								</div>
-							</form>
-							</div>
-							</div>*@
+					<div class="header-search text-end d-flex align-items-center">
+					<form class="header-search-form d-sm-block d-none" asp-controller="Home" asp-action="SearchIndex">
+					<div class="axil-search form-group">
+					<button type="submit" class="search-button"><i class="fal fa-search"></i></button>
+					<input type="text" class="form-control" placeholder="Search" name="SearchString" />
+					</div>
+					</form>
+					</div>
+					</div>*@
 
 					<div class="col-xl-3 col-lg-8 col-md-8 col-sm-9 col-12">
 						<div class="header-search text-end d-flex align-items-center">
@@ -122,17 +125,21 @@
 				</div>
 				<ul class="mainmenu">
 					<li>
-							<form class="header-search-form" asp-controller="Home" asp-action="SearchIndex">
-								<div class="axil-search form-group">
-									<button type="submit" class="search-button"><i class="fal fa-search"></i></button>
-									<input type="text" class="form-control" placeholder="Search" name="SearchString" id="SearchString">
-								</div>
-							</form>
+						<form class="header-search-form" asp-controller="Home" asp-action="SearchIndex">
+							<div class="axil-search form-group">
+								<button type="submit" class="search-button"><i class="fal fa-search"></i></button>
+								<input type="text" class="form-control" placeholder="Search" name="SearchString" id="SearchString">
+							</div>
+						</form>
 					</li>
 					<li><a asp-action="Index" asp-controller="Home">Home</a></li>
 					<li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
 					<li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
-					<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+					@*<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>*@
+					@if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+					{
+						<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+					}
 					<li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
 					<ul class="mainmenu"><partial name="_LoginPartial" /></ul>
 				</ul>
@@ -177,41 +184,6 @@
 									</a>
 								</div>
 								<ul class="mainmenu justify-content-start">
-									<li>
-										<a class="hover-flip-item-wrapper" href="#">
-											<span class="hover-flip-item">
-												<span data-text="Contact Us">Contact Us</span>
-											</span>
-										</a>
-									</li>
-									<li>
-										<a class="hover-flip-item-wrapper" href="#">
-											<span class="hover-flip-item">
-												<span data-text="Terms of Use">Terms of Use</span>
-											</span>
-										</a>
-									</li>
-									<li>
-										<a class="hover-flip-item-wrapper" href="#">
-											<span class="hover-flip-item">
-												<span data-text="AdChoices">AdChoices</span>
-											</span>
-										</a>
-									</li>
-									<li>
-										<a class="hover-flip-item-wrapper" href="#">
-											<span class="hover-flip-item">
-												<span data-text="Advertise with Us">Advertise with Us</span>
-											</span>
-										</a>
-									</li>
-									<li>
-										<a class="hover-flip-item-wrapper" href="#">
-											<span class="hover-flip-item">
-												<span data-text="Blogar Store">Blogar Store</span>
-											</span>
-										</a>
-									</li>
 								</ul>
 							</div>
 						</div>

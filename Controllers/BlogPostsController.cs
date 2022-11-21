@@ -61,6 +61,7 @@ namespace Blog.Controllers
 
             var blogPost = await _context.BlogPosts
                                          .Include(b => b.Category)
+                                         .Include(b => b.Tags)
                                          .Include(b => b.Comments)
                                              .ThenInclude(c=>c.Author)
                                          .FirstOrDefaultAsync(m => m.Slug == slug);
@@ -167,7 +168,7 @@ namespace Blog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Moderator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatorId,DateCreated,LastUpdated,CategoryId,Slug,Abstract,IsDeleted,IsPublished,ImageData,ImageType,BlogPostImage")] BlogPost blogPost, IEnumerable<int> selectedTags)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatorId,DateCreated,LastUpdated,CategoryId,Slug,Abstract,IsDeleted,IsPublished,ImageData,ImageType,BlogPostImage")] BlogPost blogPost, string? stringTags)
         {
             if (id != blogPost.Id)
             {
@@ -202,11 +203,17 @@ namespace Blog.Controllers
                     _context.Update(blogPost);
                     await _context.SaveChangesAsync();
 
-                    // Remove current tags
-                    await _blogPostService.RemoveAllBlogPostTagsAsync(blogPost.Id);
+					// Remove current tags
+					await _blogPostService.RemoveAllBlogPostTagsAsync(blogPost.Id);
 
-                    // Add selected tags to the blogPost
-                    await _blogPostService.AddTagsToBlogPostAsync(selectedTags, blogPost.Id);
+					if (!string.IsNullOrEmpty(stringTags))
+					{
+						await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
+
+					}
+
+					
+
 
                 }
                 catch (DbUpdateConcurrencyException)
