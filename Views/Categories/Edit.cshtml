@@ -1,9 +1,17 @@
-﻿@model Blog.Models.Category
+﻿@using Blog.Services.Interfaces;
+@model Blog.Models.Category
+@using Blog.Enums
+@using Blog.Services;
+
+@inject IImageService ImageService
+
+@inject IBlogPostService BlogPostService
 
 @{
     ViewData["Title"] = "Edit";
 }
 
+<div class="container">
 <h1>Edit</h1>
 
 <h4>Category</h4>
@@ -23,21 +31,32 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryImage" class="control-label"></label>
-                <img id="categoryImage" class="img-fluid" src="~/img/DefaultContactImage.png">
+
+            @*<div class="form-group">
+                <label asp-for="CategoryImage" class="control-label">Category Image</label>
+                <img id="categoryImage" class="img-fluid" src="@_ImageService.ConvertByteArrayToFile(Model.ImageData!, Model.ImageType!, (int)DefaultImage.CategoryImage)">
                 <input asp-for="CategoryImage" type="file" class="form-control" accept=".png,.jpg,.jpeg,.gif"
                        onchange="document.getElementById('categoryImage').src= window.URL.createObjectURL(this.files[0])" />
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="CategoryImage" class="control-label">Blog Post Image</label>
+                <img class="img-fluid border rounded-3 m-2" style="max-height: 250px;" src="@ImageService.ConvertByteArrayToFile(Model.ImageData!,Model.ImageType!,(int)DefaultImage.CategoryImage)" id="categoryImage">
+                <input asp-for="CategoryImage" type="file" class="form-control mt-3 pt-2" accept=".png,.jpg,.jpeg,.gif"
+                       onchange="document.getElementById('categoryImage').src = window.URL.createObjectURL(this.files[0])" />
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
 </div>
 
 @section Scripts {

@@ -49,6 +49,19 @@ namespace Blog.Controllers
             return View(blogPostPage);
         }
 
+        public async Task<IActionResult> DeletedPosts(int? pageNum)
+        {
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+            // _context.BlogPosts.Include(b => b.Category);
+            IPagedList<BlogPost> blogPostPage = (await _blogPostService.GetAllBlogPostsAsync())
+                                            .Where(b => b.IsDeleted == true)
+                                            .ToPagedList(page, pageSize);
+
+            return View(blogPostPage);
+        }
+
 
         // GET: BlogPosts/Details/5
         [AllowAnonymous]

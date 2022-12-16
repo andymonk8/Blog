@@ -141,6 +141,11 @@ namespace Blog.Controllers
             {
                 try
                 {
+                    if (category.CategoryImage != null)
+                    {
+                        category.ImageData = await _imageService.ConvertFileToByteArrayAsync(category.CategoryImage);
+                        category.ImageType = category.CategoryImage.ContentType;
+                    }
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

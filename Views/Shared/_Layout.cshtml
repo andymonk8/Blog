@@ -60,7 +60,7 @@
 								<!-- Start Mainmanu Nav -->
 								<ul class="mainmenu">
 									<li><a asp-action="Index" asp-controller="Home">Home</a></li>
-									<li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
+									<li><a asp-controller="BlogPosts" asp-action="Index">Blog Posts</a></li>
 									<li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
 									@if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
 									{
@@ -133,7 +133,7 @@
 						</form>
 					</li>
 					<li><a asp-action="Index" asp-controller="Home">Home</a></li>
-					<li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
+					<li><a asp-controller="BlogPosts" asp-action="Index">Blog Posts</a></li>
 					<li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
 					@*<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>*@
 					@if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
@@ -141,7 +141,7 @@
 						<li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
 					}
 					<li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
-					<ul class="mainmenu"><partial name="_LoginPartial" /></ul>
+					<li><partial name="_LoginPartial" /></li>
 				</ul>
 			</div>
 		</div>
